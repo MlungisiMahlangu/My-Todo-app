@@ -2,7 +2,10 @@ import Database from 'better-sqlite3';
 import fs from 'fs';
 import path from 'path';
 
-const dbPath = path.join(process.cwd(), 'data', 'todo.db');
+const dbPath = process.env.TEST_DB_PATH
+  ? process.env.TEST_DB_PATH
+  : path.join(process.cwd(), 'data', 'todo.db');
+
 fs.mkdirSync(path.dirname(dbPath), { recursive: true });
 
 const db = new Database(dbPath);

@@ -1,4 +1,4 @@
-import Database from 'better-sqlite3';
+import { DatabaseSync } from 'node:sqlite';
 import fs from 'fs';
 import path from 'path';
 
@@ -8,7 +8,7 @@ const dbPath = process.env.TEST_DB_PATH
 
 fs.mkdirSync(path.dirname(dbPath), { recursive: true });
 
-const db = new Database(dbPath);
+const db = new DatabaseSync(dbPath);
 const schema = fs.readFileSync(path.join(process.cwd(), 'src/app/lib/schema.sql'), 'utf-8');
 db.exec(schema);
 

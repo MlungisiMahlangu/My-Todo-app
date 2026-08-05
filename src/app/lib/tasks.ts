@@ -19,7 +19,7 @@ export function createTask(data: {
 }): Task {
   const stmt = db.prepare(`
     INSERT INTO tasks (title, description, due_date, topic)
-    VALUES (@title, @description, @due_date, @topic)
+    VALUES (:title, :description, :due_date, :topic)
   `);
   const result = stmt.run({
     title: data.title,
@@ -27,7 +27,7 @@ export function createTask(data: {
     due_date: data.due_date,
     topic: data.topic,
   });
-  return getTaskById(result.lastInsertRowid as number)!;
+  return getTaskById(Number(result.lastInsertRowid))!;
 }
 
 export function getTaskById(id: number): Task | undefined {
@@ -41,7 +41,7 @@ export function updateTask(
   const fields = Object.keys(data);
   if (fields.length === 0) return getTaskById(id);
 
-  const setClause = fields.map((f) => `${f} = @${f}`).join(', ');
+  const setClause = fields.map((f) => `${f} = :${f}`).join(', ');
   db.prepare(`UPDATE tasks SET ${setClause} WHERE id = @id`).run({ ...data, id });
   return getTaskById(id);
 }
